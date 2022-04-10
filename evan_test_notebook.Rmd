@@ -1,0 +1,114 @@
+---
+title: "Final Project Workbook"
+author: "Evan O'Keefe"
+date: '2022-04-10'
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+
+data <- read_csv("479_tidy_data.csv") %>% 
+  arrange(desc(num_commit))
+
+univs <- data %>% 
+  group_by(institution) %>% 
+  summarise(num_commit = sum(num_commit)) %>% 
+  arrange(desc(num_commit))
+```
+
+```{r}
+library(plotly)
+
+top_univs <- function(df, n){
+  df_slice <- head(df, n)
+  div_factor <- 10^floor(log10(min(df_slice$num_commit)))
+  div_txt <- format(div_factor, big.mark=",", scientific = FALSE)
+  p <- ggplot(df_slice, aes(x = reorder(institution, -num_commit), y = num_commit/div_factor)) +
+    geom_col(aes(text = paste(
+      "Commits:", format(num_commit, big.mark=",")
+      ))) +
+    labs(
+      title = "Academic Institutions With The Most GitHub Commits",
+      x = "",
+      y = paste("Number of Commits per", div_txt)
+    ) +
+    theme(axis.text.x = element_text(angle = 30, hjust = 1))
+  ggplotly(p, tooltip = c("text"))
+}
+
+top_person <- function(df, n){
+  df_slice <- head(df, n)
+  div_factor <- 10^floor(log10(min(df_slice$num_commit)))
+  div_txt <- format(div_factor, big.mark=",", scientific = FALSE)
+  p <- ggplot(df_slice, aes(x = reorder(name, -num_commit), y = num_commit/div_factor)) +
+    geom_col(aes(text = paste(
+      "Commits:", format(num_commit, big.mark=","), "\n",
+      "Institution:", institution
+    ))) +
+    labs(
+      title = "User With The Most GitHub Commits",
+      x = "",
+      y = paste("Number of Commits per", div_txt)
+    ) +
+    theme(axis.text.x = element_text(angle = 30, hjust = 1))
+  ggplotly(p, tooltip = c("text"))
+}
+```
+
+```{r}
+top_person(data, 10)
+```
+
+
+```{r}
+library(shiny)
+
+ui <- fluidPage(
+  titlePanel("Exploring GitHub Commits By Academic Institution"),
+  numericInput("num_disp",
+              "Number of Bars",
+              value = 10),
+  radioButtons("choice",
+               "Show Users or Academic Institutions",
+               choices = c("Users", "Institutions")
+               ),
+  plotlyOutput("bar")
+)
+
+server <- function(input, output) {
+bar_plot <- reactive({
+    click <- event_data("plotly_click")
+    if(!is.null(click)){
+      if(input$choice == "Users"){
+        clicked <- head(data, input$num_disp)$institution[pull(click, x)]
+        data %>% 
+          filter(institution == clicked) %>% 
+          top_person(input$num_disp)
+      }else{
+        clicked <- head(univs, input$num_disp)$institution[pull(click, x)]
+        data %>% 
+          filter(institution == clicked) %>% 
+          top_person(input$num_disp)
+      }
+    }else if(input$choice == "Users"){
+      top_person(data, input$num_disp)
+    }else{
+      top_univs(univs, input$num_disp)
+    }
+    
+  })
+  output$bar <- renderPlotly(bar_plot())
+}
+
+shinyApp(ui, server)
+```
+
+
+
+
