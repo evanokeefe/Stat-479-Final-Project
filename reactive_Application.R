@@ -1,14 +1,47 @@
 library(tidyverse)
 library(plotly)
 library(shiny)
+library("dplyr")
+library("tidyr")
+library("ggplot2")
+library("gridExtra")
+library("networkD3")
+library("ggraph")
+library("tidygraph")
 
-data <- read_csv("data/479_tidy_data.csv") %>% 
+data <- read_csv("./data/479_tidy_data.csv") %>% 
   arrange(desc(num_commit))
+
+colleges <- pull(data, institution) %>%
+  unique() %>%
+  na.omit()
 
 univs <- data %>% 
   group_by(institution) %>% 
   summarise(num_commit = sum(num_commit)) %>% 
   arrange(desc(num_commit))
+
+networkDiagram <- function(tempata) {
+  E <- data.frame(
+    source = tempata$institution,
+    target =  tempata$name,
+    value = tempata$num_commit
+  )
+  
+  G <- as_tbl_graph(E, directed = FALSE) %>% activate(edges) %>%
+    mutate(value = factor(value) )%>%  activate(nodes)%>%
+    mutate(type = name %in% tempata$college)
+  
+  ggraph(G, layout = 'kk') + 
+    geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.55) +
+    geom_node_label(aes(label = name, col = type, size = type)) +
+    scale_color_manual(values = c("#BF4545", "#225C73")) +
+    scale_size_discrete(range = c(2.5, 5)) +
+    scale_fill_brewer(palette = "Set2") +
+    coord_fixed() +
+    theme_void()
+}
+
 
 top_univs <- function(df, n){
   df_slice <- head(df, n)
@@ -55,7 +88,9 @@ ui <- fluidPage(
                choices = c("Users", "Institutions")
   ),
   p("Click a bar to view the institutions top contributors. Double click anywhere to reset."),
-  plotlyOutput("bar")
+  plotlyOutput("bar"),
+  selectInput("colleges", "College", colleges),
+  plotOutput("network")
 )
 
 server <- function(input, output) {
@@ -80,6 +115,15 @@ server <- function(input, output) {
     }
     
   })
+  
+  college_subset <- reactive({
+    filter(data,institution==input$colleges) 
+  })
+  
+  output$network <- renderPlot({
+    networkDiagram(college_subset())
+  })
+  
   output$bar <- renderPlotly(bar_plot())
 }
 
