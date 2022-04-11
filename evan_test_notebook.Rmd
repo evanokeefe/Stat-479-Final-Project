@@ -3,7 +3,6 @@ title: "Final Project Workbook"
 author: "Evan O'Keefe"
 date: '2022-04-10'
 output: html_document
-runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -13,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 
-data <- read_csv("479_tidy_data.csv") %>% 
+data <- read_csv("data/479_tidy_data.csv") %>% 
   arrange(desc(num_commit))
 
 univs <- data %>% 
@@ -62,7 +61,7 @@ top_person <- function(df, n){
 ```
 
 ```{r}
-top_person(data, 10)
+top_univs(univs, 15)
 ```
 
 
@@ -105,10 +104,14 @@ bar_plot <- reactive({
   })
   output$bar <- renderPlotly(bar_plot())
 }
-
-shinyApp(ui, server)
 ```
 
-
-
+```{r}
+test1 <- data %>% 
+  mutate(hash = str_remove(email, "@.*"),
+         institution = str_to_lower(institution)) %>% 
+  group_by(hash, institution) %>% 
+  summarise(num_commit = sum(num_commit),
+            name = max(name))
+```
 

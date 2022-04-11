@@ -9,7 +9,12 @@ library("networkD3")
 library("ggraph")
 library("tidygraph")
 
-data <- read_csv("./data/479_tidy_data.csv") %>% 
+data <- read_csv("./data/479_tidy_data.csv") %>%
+  mutate(hash = str_remove(email, "@.*"),
+         institution = str_to_lower(institution)) %>% 
+  group_by(hash, institution) %>% 
+  summarise(num_commit = sum(num_commit),
+            name = max(name)) %>% 
   arrange(desc(num_commit))
 
 colleges <- pull(data, institution) %>%
