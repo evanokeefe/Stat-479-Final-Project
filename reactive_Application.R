@@ -43,6 +43,26 @@ networkDiagram <- function(tempata) {
     theme_void()
 }
 
+institutionNetworkDiagram <- function(){
+  institution_network <- network %>%
+    group_by(src_institution, dst_institution) %>%
+    summarize(value=n()) %>%
+    filter(src_institution != dst_institution & value > 100)
+  
+  E <- data.frame(
+    source = institution_network$src_institution,
+    target = institution_network$dst_institution,
+    value = institution_network$value
+  )
+  
+  G <- as_tbl_graph(E, directed = FALSE)
+  
+  ggraph(G, layout = 'kk') + 
+    geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.55) +
+    geom_node_label(aes(label = name)) +
+    coord_fixed() +
+    theme_void()
+}
 
 top_univs <- function(df, n){
   df_slice <- head(df, n)
@@ -81,6 +101,7 @@ top_person <- function(df, n){
 
 ui <- fluidPage(
   titlePanel("Exploring GitHub Commits By Academic Institution"),
+  p("Section 1: Exploring Ranking", style = "font-size:25px; font-weight: bold;"),
   numericInput("num_disp",
                "Number of Bars",
                value = 10),
@@ -88,8 +109,10 @@ ui <- fluidPage(
                "Show Users or Academic Institutions",
                choices = c("Users", "Institutions")
   ),
-  p("Click a bar to view the institutions top contributors. Double click anywhere to reset."),
+  p("Click a bar to view the institutions top contributors. Double click anywhere to reset.", style = "font-size:15px"),
   plotlyOutput("bar"),
+  p("Section 2: Exploring Connections", style = "font-size:25px; font-weight: bold;"),
+  plotOutput("institution_network", width = "100%", height = "800px"),
   selectInput("colleges", "College", colleges),
   plotOutput("network", width = "100%", height = "1300px")
 )
@@ -123,6 +146,10 @@ server <- function(input, output) {
   
   output$network <- renderPlot({
     networkDiagram(college_subset())
+  })
+  
+  output$institution_network <- renderPlot({
+    institutionNetworkDiagram()
   })
   
   output$bar <- renderPlotly(bar_plot())
