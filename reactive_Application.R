@@ -9,6 +9,7 @@ library("networkD3")
 library("ggraph")
 library("tidygraph")
 
+network <- read_csv('./data/network.csv')
 data <- read_csv("./data/479_tidy_data.csv") %>%
   mutate(hash = str_remove(email, "@.*"),
          institution = str_to_lower(institution)) %>% 
@@ -28,21 +29,16 @@ univs <- data %>%
 
 networkDiagram <- function(tempata) {
   E <- data.frame(
-    source = tempata$institution,
-    target =  tempata$name,
-    value = tempata$num_commit
+    source = tempata$src_committer,
+    target = tempata$dst_committer,
+    value = 1
   )
   
-  G <- as_tbl_graph(E, directed = FALSE) %>% activate(edges) %>%
-    mutate(value = factor(value) )%>%  activate(nodes)%>%
-    mutate(type = name %in% tempata$college)
+  G <- as_tbl_graph(E, directed = FALSE)
   
   ggraph(G, layout = 'kk') + 
     geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.55) +
-    geom_node_label(aes(label = name, col = type, size = type)) +
-    scale_color_manual(values = c("#BF4545", "#225C73")) +
-    scale_size_discrete(range = c(2.5, 5)) +
-    scale_fill_brewer(palette = "Set2") +
+    geom_node_label(aes(label = name)) +
     coord_fixed() +
     theme_void()
 }
@@ -95,7 +91,7 @@ ui <- fluidPage(
   p("Click a bar to view the institutions top contributors. Double click anywhere to reset."),
   plotlyOutput("bar"),
   selectInput("colleges", "College", colleges),
-  plotOutput("network")
+  plotOutput("network", width = "100%", height = "1300px")
 )
 
 server <- function(input, output) {
@@ -122,7 +118,7 @@ server <- function(input, output) {
   })
   
   college_subset <- reactive({
-    filter(data,institution==input$colleges) 
+    filter(network, src_institution==input$colleges & dst_institution==input$colleges) 
   })
   
   output$network <- renderPlot({

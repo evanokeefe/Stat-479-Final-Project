@@ -1,0 +1,21 @@
+---
+title: "huan_test_notebook"
+author: "Huan Xu"
+date: "4/10/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+
+target_institution <- "wisc"
+network <- read_csv("data/network.csv")
+network %>%
+  filter()
+```
