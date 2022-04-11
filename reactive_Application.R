@@ -40,14 +40,16 @@ networkDiagram <- function(tempata) {
     geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.55) +
     geom_node_label(aes(label = name)) +
     coord_fixed() +
-    theme_void()
+    labs(title = "Connection Betwwen Committers Within the Institution") + 
+    theme_void() +
+    theme(plot.title = element_text(size = 20, hjust = 0.5)) 
 }
 
-institutionNetworkDiagram <- function(){
+institutionNetworkDiagram <- function(target_institution){
   institution_network <- network %>%
     group_by(src_institution, dst_institution) %>%
     summarize(value=n()) %>%
-    filter(src_institution != dst_institution & value > 100)
+    filter(src_institution != dst_institution & value > 50)
   
   E <- data.frame(
     source = institution_network$src_institution,
@@ -61,7 +63,9 @@ institutionNetworkDiagram <- function(){
     geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.55) +
     geom_node_label(aes(label = name)) +
     coord_fixed() +
-    theme_void()
+    labs(title = "Connection Betwwen Academic Institutions") + 
+    theme_void() +
+    theme(plot.title = element_text(size = 20, hjust = 0.5)) 
 }
 
 top_univs <- function(df, n){
@@ -77,7 +81,7 @@ top_univs <- function(df, n){
       x = "",
       y = paste("Number of Commits per", div_txt)
     ) +
-    theme(axis.text.x = element_text(angle = 30, hjust = 1))
+    theme(axis.text.x = element_text(angle = 30, hjust = 1), plot.title = element_text(hjust = 0.5))
   ggplotly(p, tooltip = c("text"))
 }
 
@@ -95,7 +99,7 @@ top_person <- function(df, n){
       x = "",
       y = paste("Number of Commits per", div_txt)
     ) +
-    theme(axis.text.x = element_text(angle = 30, hjust = 1))
+    theme(axis.text.x = element_text(angle = 30, hjust = 1), plot.title = element_text(hjust = 0.5))
   ggplotly(p, tooltip = c("text"))
 }
 
@@ -112,8 +116,8 @@ ui <- fluidPage(
   p("Click a bar to view the institutions top contributors. Double click anywhere to reset.", style = "font-size:15px"),
   plotlyOutput("bar"),
   p("Section 2: Exploring Connections", style = "font-size:25px; font-weight: bold;"),
-  plotOutput("institution_network", width = "100%", height = "800px"),
   selectInput("colleges", "College", colleges),
+  plotOutput("institution_network", width = "100%", height = "800px"),
   plotOutput("network", width = "100%", height = "1300px")
 )
 
@@ -149,7 +153,7 @@ server <- function(input, output) {
   })
   
   output$institution_network <- renderPlot({
-    institutionNetworkDiagram()
+    institutionNetworkDiagram(input$colleges)
   })
   
   output$bar <- renderPlotly(bar_plot())
