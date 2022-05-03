@@ -1,6 +1,7 @@
 library(tidyverse)
 library(plotly)
 library(shiny)
+library("superheat")
 library("dplyr")
 library("tidyr")
 library("ggplot2")
@@ -36,13 +37,16 @@ networkDiagram <- function(tempata) {
   
   G <- as_tbl_graph(E, directed = FALSE)
   
-  ggraph(G, layout = 'kk') + 
-    geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.55) +
-    geom_node_label(aes(label = name)) +
+  G <- G %>%
+    mutate(cluster = as.factor(group_louvain()))
+  
+  ggraph(G, layout = 'fr') + 
+    geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.5) +
+    geom_node_label(aes(label = name, fill = cluster)) +
     coord_fixed() +
     labs(title = "Connection Betwwen Committers Within the Institution") + 
     theme_void() +
-    theme(plot.title = element_text(size = 20, hjust = 0.5)) 
+    theme(plot.title = element_text(size = 20, hjust = 0.5) , legend.position="none") 
 }
 
 institutionNetworkDiagram <- function(target_institution){
@@ -59,13 +63,13 @@ institutionNetworkDiagram <- function(target_institution){
   
   G <- as_tbl_graph(E, directed = FALSE)
   
-  ggraph(G, layout = 'kk') + 
-    geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.55) +
+  ggraph(G, layout = 'fr') + 
+    geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.5) +
     geom_node_label(aes(label = name)) +
     coord_fixed() +
     labs(title = "Connection Betwwen Academic Institutions") + 
     theme_void() +
-    theme(plot.title = element_text(size = 20, hjust = 0.5)) 
+    theme(plot.title = element_text(size = 20, hjust = 0.5))
 }
 
 top_univs <- function(df, n){
@@ -89,7 +93,7 @@ top_person <- function(df, n){
   df_slice <- head(df, n)
   div_factor <- 10^floor(log10(min(df_slice$num_commit)))
   div_txt <- format(div_factor, big.mark=",", scientific = FALSE)
-  p <- ggplot(df_slice, aes(x = reorder(name, -num_commit), y = num_commit/div_factor)) +
+  p <- ggplot(df_slice, aes(x = reorder(name, -num_commit), y = num_commit/div_factor, fill=institution)) +
     geom_col(aes(text = paste(
       "Commits:", format(num_commit, big.mark=","), "\n",
       "Institution:", institution
@@ -117,8 +121,9 @@ ui <- fluidPage(
   plotlyOutput("bar"),
   p("Section 2: Exploring Connections", style = "font-size:25px; font-weight: bold;"),
   selectInput("colleges", "College", colleges),
-  plotOutput("institution_network", width = "100%", height = "800px"),
-  plotOutput("network", width = "100%", height = "1300px")
+  plotOutput("network", width = "100%", height = "1300px"),
+  plotOutput("institution_network", width = "100%", height = "800px")
+  
 )
 
 server <- function(input, output) {
