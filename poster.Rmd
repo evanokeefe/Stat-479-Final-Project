@@ -1,0 +1,91 @@
+---
+# PLEASE SEE THE README for in depth description github.com/brentthorne/posterdown
+poster_height: "36in"
+poster_width: "48in"
+font_family: 'Rasa'
+#ESSENTIALS
+title: "**Analyzing Academic Institutions' Constributions To \n The Open Source Community Through GitHub Commits **"
+author:
+  - name: Evan O'Keefe
+  - name: Jaskaran Bakshi
+  - name: Yufeng Han
+  - name: Huan Xu
+  - name: Kechen Lu
+affiliation:
+  - address: University of Wisconsin - Madison, Madison, WI
+#Column
+column_numbers: 3
+
+#STYLE & FORMATTING
+title_textsize: "80pt"
+author_textsize: "1em"
+authorextra_textsize: "50px"
+affiliation_textsize: "40px"
+affiliation_textcol: '#00000080'
+caption_fontsize: "30pt"
+
+#---POSTER BODY OPTIONS---#
+primary_colour: '#a21933'
+accent_colour: "#777777"
+sectitle_textsize: "65px"
+body_bgcol: "#ffffff"
+body_textsize: "45px"
+body_textcol: "#000000"
+reference_textsize: "23px"
+#--Standard Options--#
+output: 
+  posterdown::posterdown_html:
+    self_contained: false
+    pandoc_args: --mathjax
+    highlight: espresso
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  results = 'asis',
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = 'center'
+)
+library(knitr)
+```
+
+# Introduction
+
+Analysis on Github contributions is important: According to the paper, Influence analysis of Github repositories by Hu, Y., GitHub is the culture mosaic for promoting programming languages, new development frameworks, and softwares. It is the front-line of bold technical innovation and the cutting-edge of the technological landscape. When taking a closer look, the influence of GitHub is built commit by commit, repository by repository by the open-source contributors. However, the existing analysis like Open Source Index mainly focused on how big tech cooperations contribute to the community, but gave little to no attention to the performance of the academica. Therefore, to bridge the gap, we analyzed GitHub contribution data of U.S. academic institutions collected from Google’s public data warehouse “github_repos”. Specifically, we used Node-Link Network diagrams and bar charts to show how individuals from academic institutions contribute to the broader GitHub open-source community. By analyzing individual’s contributions and shared history, we can draw important conclusions on how academic institutions interact with the greater open-souce community.
+
+# Methods
+
+
+# Results
+
+```{r, echo=FALSE, fig.cap="**View of the Reactive Bar Chart.** This is one of the many views from the reactive bar chart currently showing the top 10 users based on their commit numbers. The options to change the number of bars and aggregation to the institutional level are displayed at the top.", out.width = '75%', fig.align="center"}
+knitr::include_graphics("imgs/bar-graph.png")
+```
+
+To allow any user to rapidly explore the data a reactive bar chart with various different viewing options was created. The bar chart defaults to the top ten users based on their number of commits. Plotly tooltips allow the user to mouse over each bar to see the precise number of commits as well as their academic institution. There is a numeric input box that allows users to change the number of bars to explore more or fewer users/institutions. The y-axis scaling will update dynamically based on the smallest value and the axis title text will update to match. By selecting the “Institutions” radio button the view will switch to the institutions with the most total commits. These views can be further augmented by clicking on an individual bar which will bring up that institution's top users.
+
+```{r, echo=FALSE, fig.cap="**View of the Static Node-Link Diagram.** Connections across committers within an intitution (in this case, the University of Utah).", out.width = '50%', fig.align="center"}
+knitr::include_graphics("imgs/nodes.png")
+```
+
+This reactive node-link diagram reveals the connections across all committers within the user-selected academic institution. Like the previous graph, two commiters are said to be connected if they both commit to the same repositories. This graph gives us 2 valuable insights: 1) each cluster in the graph can be interpreted as a large-scale collaborative open-source project led by the selected academic institution, where nodes in the cluster (students, staff members, and professors) worked closely to collaborate and contribute. From this graph, we can conclude that, across the history, the University of Utah led 4 such large-scale open-source projects. 2) This graph provides a finer look into the social and performance aspects of individual contributors. For example, we can discover interdisciplinary contributors by finding nodes that connect to multiple clusters. We can also identify the technological  “social network” of an academic institution.
+
+# Conclusion
+
+Overall, we can see how a vast network of users contributes to various open source repositories through different institutions. We can clearly see that MIT has a vast collection of users contributing to many open source platforms which is a good indication that our analysis is in the right direction because a majority of this platform hosts many of their institutional repositories. With the combination of the bar graph and the network graph we hope to allow users to understand universities creation of repositories by also understanding the users who are pushing the most code in specific universities.
+
+# Improvements
+
+Upon reviewing the results from the views of the bar chart an issue was observed where users with the same name would be stacked and display in an awkward manner. In trying to find a solution to the issue it was observed that these were likely the same user under different accounts/emails e.g. @wisc.edu vs @stat.wisc.edu. In order to resolve this issue the hashed email was extracted from the domain and aggregated by this value. To account for individuals who may have changed institutions (Figure 4) within their careers the group by was performed on the hash and institution. The main issue from this process arose with the differing names for these duplicate hashes (Figure 5). A temporary fix for this issue was seleted as summarizing by the maximum name value. This could be a future modification that may bring interesting results if any occur.
+
+```{r, echo=FALSE, fig.cap="**Example of a Change of Institution.** The above figure shows one user determined by the hashed email address that is present under two different institutions.).", out.width = '95%', fig.align="center"}
+knitr::include_graphics("imgs/table1.png")
+```
+
+```{r, echo=FALSE, fig.cap="**Example of One User Multiple Names.** The figure above shows a single user that has four rows associated with their unique hash due to the various names. .", out.width = '95%', fig.align="center"}
+knitr::include_graphics("imgs/table2.png")
+```
+
+# References

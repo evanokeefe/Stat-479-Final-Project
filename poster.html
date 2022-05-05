@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<!--
+Font-awesome icons ie github or twitter
+-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/brands.css" integrity="sha384-n9+6/aSqa9lBidZMRCQHTHKJscPq6NW4pCQBiMmHdUCvPN8ZOg2zJJTkC7WIezWv" crossorigin="anonymous">
+
+<!--
+Google fonts api stuff
+-->
+<link href='https://fonts.googleapis.com/css?family=Rasa' rel='stylesheet'>
+
+
+
+<title>Analyzing Academic Institutions’ Constributions To The Open Source Community Through GitHub Commits </title>
+
+
+
+
+
+
+<style>
+@page {
+size: 48in 36in;
+margin: 0;
+padding: 0;
+}
+body {
+margin: 0;
+font-size: 45px;
+width: 48in;
+height: 36in;
+padding: 0;
+text-align: justify;
+font-family: Rasa;
+}
+.poster_wrap {
+width: 48in;
+height: 36in;
+padding: 0cm;
+}
+.title_container {
+width: 48in;
+height: calc(36in * 0.15);
+overflow: hidden;
+background-color: #a21933;
+border: 0 solid #0b4545;
+}
+.logo_left {
+float: left;
+width: 10%;
+height: 100%;
+background-color: #a21933;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.logo_right {
+float: right;
+width: 10%;
+height: 100%;
+background-color: #a21933;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.poster_title {
+text-align: center;
+position: relative;
+float: left;
+width: 80%;
+height: 100%;
+color: #FFFFFF;
+top: 50%;
+transform: translateY(-50%);
+-webkit-transform: translateY(-50%);
+}
+#title {
+font-family: Rasa;
+}
+/* unvisited link */
+a:link {
+color: #777777;
+}
+.mybreak {
+  break-before: column;
+}
+/* visited link */
+a:visited {
+color: #777777;
+}
+
+/* mouse over link */
+a:hover {
+color: #777777;
+}
+
+/* selected link */
+a:active {
+color: #777777;
+}
+.poster_body {
+-webkit-column-count: 3; /* Chrome, Safari, Opera */
+-moz-column-count: 3; /* Firefox */
+column-count: 3;
+-webkit-column-fill: auto;
+-moz-column-fill: auto;
+column-fill: auto;
+-webkit-column-rule-width: 1mm;
+-moz-column-rule-width: 1mm;
+column-rule-width: 1mm;
+-webkit-column-rule-style: dashed;
+-moz-column-rule-style: dashed;
+column-rule-style: dashed;
+-webkit-column-rule-color: #a21933;
+-moz-column-rule-color: #a21933;
+column-rule-color: #a21933;
+column-gap: 1em;
+padding-left: 0.5em;
+padding-right: 0.5em;
+height: 100%;
+color: #000000
+background-color: #ffffff;
+}
+.poster_title h1 {
+font-size: 80pt;
+margin: 0;
+border: 0;
+font-weight: normal;
+}
+.poster_body_wrap{
+width: calc(48in + 0 + 0);
+height: calc(36in * 0.83);
+padding-top: calc(36in * 0.005);
+padding-bottom: calc(36in * 0.01);
+background-color: #ffffff;
+}
+.poster_title h3 {
+color: #ffffff;
+font-size: 1em;
+margin: 0;
+border: 0;
+font-weight: normal;
+}
+.poster_title h3 > sup {
+  font-size: 35pt;
+  margin-left: 0.02em;
+}
+.poster_title h5 {
+color: #00000080;
+font-size: ;
+margin: 0;
+border: 0;
+font-weight: normal;
+}
+img {
+margin-top: 2cm;
+margin-bottom: 0;
+}
+.section {
+  padding: 0.2em;
+}
+.poster_body h1 {
+text-align: center;
+color: #FFFFFF;
+font-size: 65px;
+border: 2mm solid #a21933;
+background-color: #a21933;
+border-radius: 4mm 0mm;
+margin-top: 2mm;
+margin-bottom: 2mm;
+font-weight: normal;
+}
+.poster_body h2 {
+color: #000000;
+font-size: 40pt;
+padding-left: 4mm;
+font-weight: normal;
+}
+.span {
+width: 200%;
+}
+/* center align leaflet map,
+from https://stackoverflow.com/questions/52112119/center-leaflet-in-a-rmarkdown-document */
+.html-widget {
+margin: auto;
+position: sticky;
+margin-top: 2cm;
+margin-bottom: 2cm;
+}
+.leaflet.html-widget.html-widget-static-bound.leaflet-container.leaflet-touch.leaflet-fade-anim.leaflet-grab.leaflet-touch-drag.leaflet-touch-zoom {
+position: sticky;
+width: 100%;
+}
+pre.sourceCode.r {
+background-color: #dddddd40;
+border-radius: 4mm;
+padding: 4mm;
+width: 75%;
+/* align-items: center; */
+margin: auto;
+padding-left: 2cm;
+}
+code.sourceCode.r{
+background-color: transparent;
+font-size: 20pt;
+border-radius: 2mm;
+}
+.caption {
+font-size: 25pt;
+}
+.table caption {
+font-size: 25pt;
+padding-bottom: 3mm;
+
+}
+code {
+font-size: 1em;
+font-family: monospace;
+background-color: #00808024;
+color: #a21933;
+padding: 1.2mm;
+border-radius: 2mm;
+}
+.poster_title code {
+font-size: 1em;
+}
+table {
+font-size: 40px;
+margin: auto;
+border-top: 3px solid #666;
+border-bottom: 3px solid #666;
+}
+table thead th {
+border-bottom: 3px solid #ddd;
+}
+td {
+padding: 8px;
+}
+th {
+padding: 15px;
+}
+caption {
+margin-bottom: 10px;
+}
+.poster_body p {
+margin-right: 4mm;
+margin-left: 4mm;
+margin-top: 6mm;
+margin-bottom: 10mm;
+}
+.poster_body ol {
+margin-right: 4mm;
+margin-left: 4mm;
+}
+#ul {
+margin-right: 4mm;
+margin-left: 4mm;
+}
+.references p {
+font-size: 20pt;
+}
+.orcid img {
+  width: 1em;
+}
+</style>
+</head>
+<body>
+
+
+<div class="poster_wrap">
+<div class="title_container">
+<!-- Left Logo  -->
+<div class="logo_left">
+</div>
+<!-- Poster Title -->
+<div class= "poster_title">
+<h1 id="title"><strong>Analyzing Academic Institutions’ Constributions To
+The Open Source Community Through GitHub Commits </strong></h1>
+<h3 id="author">Evan O’Keefe<sup></sup>, Jaskaran Bakshi<sup></sup>, Yufeng Han<sup></sup>, Huan Xu<sup></sup>, Kechen Lu<sup></sup></h3><br>
+<h5 id="affiliation"><sup></sup> University of Wisconsin - Madison, Madison, WI</h5>
+</div>
+<!-- Right Logo  -->
+<div class="logo_right">
+</div>
+</div>
+
+<div class='poster_body_wrap'>
+<div class='poster_body'>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Analysis on Github contributions is important: According to the paper, Influence analysis of Github repositories by Hu, Y., GitHub is the culture mosaic for promoting programming languages, new development frameworks, and softwares. It is the front-line of bold technical innovation and the cutting-edge of the technological landscape. When taking a closer look, the influence of GitHub is built commit by commit, repository by repository by the open-source contributors. However, the existing analysis like Open Source Index mainly focused on how big tech cooperations contribute to the community, but gave little to no attention to the performance of the academica. Therefore, to bridge the gap, we analyzed GitHub contribution data of U.S. academic institutions collected from Google’s public data warehouse “github_repos”. Specifically, we used Node-Link Network diagrams and bar charts to show how individuals from academic institutions contribute to the broader GitHub open-source community. By analyzing individual’s contributions and shared history, we can draw important conclusions on how academic institutions interact with the greater open-souce community.</p>
+</div>
+<div id="methods" class="section level1">
+<h1>Methods</h1>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
+<img src="imgs/bar-graph.png" alt="**View of the Reactive Bar Chart.** This is one of the many views from the reactive bar chart currently showing the top 10 users based on their commit numbers. The options to change the number of bars and aggregation to the institutional level are displayed at the top." width="75%" />
+<p class="caption">
+Figure 1: <strong>View of the Reactive Bar Chart.</strong> This is one of the many views from the reactive bar chart currently showing the top 10 users based on their commit numbers. The options to change the number of bars and aggregation to the institutional level are displayed at the top.
+</p>
+</div>
+<p>To allow any user to rapidly explore the data a reactive bar chart with various different viewing options was created. The bar chart defaults to the top ten users based on their number of commits. Plotly tooltips allow the user to mouse over each bar to see the precise number of commits as well as their academic institution. There is a numeric input box that allows users to change the number of bars to explore more or fewer users/institutions. The y-axis scaling will update dynamically based on the smallest value and the axis title text will update to match. By selecting the “Institutions” radio button the view will switch to the institutions with the most total commits. These views can be further augmented by clicking on an individual bar which will bring up that institution’s top users.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
+<img src="imgs/nodes.png" alt="**View of the Static Node-Link Diagram.** Connections across committers within an intitution (in this case, the University of Utah)." width="50%" />
+<p class="caption">
+Figure 2: <strong>View of the Static Node-Link Diagram.</strong> Connections across committers within an intitution (in this case, the University of Utah).
+</p>
+</div>
+<p>This reactive node-link diagram reveals the connections across all committers within the user-selected academic institution. Like the previous graph, two commiters are said to be connected if they both commit to the same repositories. This graph gives us 2 valuable insights: 1) each cluster in the graph can be interpreted as a large-scale collaborative open-source project led by the selected academic institution, where nodes in the cluster (students, staff members, and professors) worked closely to collaborate and contribute. From this graph, we can conclude that, across the history, the University of Utah led 4 such large-scale open-source projects. 2) This graph provides a finer look into the social and performance aspects of individual contributors. For example, we can discover interdisciplinary contributors by finding nodes that connect to multiple clusters. We can also identify the technological “social network” of an academic institution.</p>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Overall, we can see how a vast network of users contributes to various open source repositories through different institutions. We can clearly see that MIT has a vast collection of users contributing to many open source platforms which is a good indication that our analysis is in the right direction because a majority of this platform hosts many of their institutional repositories. With the combination of the bar graph and the network graph we hope to allow users to understand universities creation of repositories by also understanding the users who are pushing the most code in specific universities.</p>
+</div>
+<div id="improvements" class="section level1">
+<h1>Improvements</h1>
+<p>Upon reviewing the results from the views of the bar chart an issue was observed where users with the same name would be stacked and display in an awkward manner. In trying to find a solution to the issue it was observed that these were likely the same user under different accounts/emails e.g. <span class="citation">@wisc.edu</span> vs <span class="citation">@stat.wisc.edu</span>. In order to resolve this issue the hashed email was extracted from the domain and aggregated by this value. To account for individuals who may have changed institutions (Figure 4) within their careers the group by was performed on the hash and institution. The main issue from this process arose with the differing names for these duplicate hashes (Figure 5). A temporary fix for this issue was seleted as summarizing by the maximum name value. This could be a future modification that may bring interesting results if any occur.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<img src="imgs/table1.png" alt="**Example of a Change of Institution.** The above figure shows one user determined by the hashed email address that is present under two different institutions.)." width="95%" />
+<p class="caption">
+Figure 3: <strong>Example of a Change of Institution.</strong> The above figure shows one user determined by the hashed email address that is present under two different institutions.).
+</p>
+</div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<img src="imgs/table2.png" alt="**Example of One User Multiple Names.** The figure above shows a single user that has four rows associated with their unique hash due to the various names. ." width="95%" />
+<p class="caption">
+Figure 4: <strong>Example of One User Multiple Names.</strong> The figure above shows a single user that has four rows associated with their unique hash due to the various names. .
+</p>
+</div>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+</div>
+</div>
+</div>
+
+</div>
+
+
+
+</body>
+</html>
