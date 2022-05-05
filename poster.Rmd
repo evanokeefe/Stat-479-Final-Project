@@ -12,24 +12,23 @@ author:
   - name: Huan Xu
   - name: Kechen Lu
 affiliation:
-  - address: University of Wisconsin - Madison, Madison, WI
-#Column
+  - address: "University of Wisconsin - Madison, Madison, WI"
 column_numbers: 3
+logoleft_name: "imgs/logo.png"
+logoright_name: "imgs/logo.png"
 
 #STYLE & FORMATTING
 title_textsize: "80pt"
-author_textsize: "1em"
-authorextra_textsize: "50px"
-affiliation_textsize: "40px"
+author_textsize: "60px"
+affiliation_textsize: "60px"
 affiliation_textcol: '#00000080'
-caption_fontsize: "30pt"
 
 #---POSTER BODY OPTIONS---#
 primary_colour: '#a21933'
 accent_colour: "#777777"
-sectitle_textsize: "65px"
+sectitle_textsize: "60px"
 body_bgcol: "#ffffff"
-body_textsize: "45px"
+body_textsize: "41px"
 body_textcol: "#000000"
 reference_textsize: "23px"
 #--Standard Options--#
@@ -57,14 +56,28 @@ Analysis on Github contributions is important: According to the paper, Influence
 
 # Methods
 
+<center> Goal </center>
+Our group strived to observe the impact of academic institutions have on the open-source community through analyzing the number of commits at a user and institution wide level.
+
+<center> Data Processing </center>
+Any rows  that contained null or NA values were dropped with dyplr's drop_na function. Next the institution names were extracted from email domain from the respective columns column.
+
+<center> Visualizations </center>
+Our first visualization created is reactive bar chart displaying the number of commits with options to select grouping the data by users or institutions. Next a static node-link diagram shows the collaborations across U.S. academic institutions. Finally we created a reactive node-link diagram revealing the connections across all committers within the user-selected academic institution.
 
 # Results
 
-```{r, echo=FALSE, fig.cap="**View of the Reactive Bar Chart.** This is one of the many views from the reactive bar chart currently showing the top 10 users based on their commit numbers. The options to change the number of bars and aggregation to the institutional level are displayed at the top.", out.width = '75%', fig.align="center"}
+```{r, echo=FALSE, fig.cap="**View of the Reactive Bar Chart.** This is one of the many views from the reactive bar chart currently showing the top 10 users based on their commit numbers. The options to change the number of bars and aggregation to the institutional level are displayed at the top.", out.width = '95%', fig.align="center"}
 knitr::include_graphics("imgs/bar-graph.png")
 ```
 
 To allow any user to rapidly explore the data a reactive bar chart with various different viewing options was created. The bar chart defaults to the top ten users based on their number of commits. Plotly tooltips allow the user to mouse over each bar to see the precise number of commits as well as their academic institution. There is a numeric input box that allows users to change the number of bars to explore more or fewer users/institutions. The y-axis scaling will update dynamically based on the smallest value and the axis title text will update to match. By selecting the “Institutions” radio button the view will switch to the institutions with the most total commits. These views can be further augmented by clicking on an individual bar which will bring up that institution's top users.
+
+```{r, echo=FALSE, fig.cap="**View of the Static Node-Link Diagram.** This diagram visualizes the connections across institutions based off their member's shared repositories.", out.width = '50%', fig.align="center"}
+knitr::include_graphics("imgs/web.png")
+```
+
+This static node-link diagram shows the connections across U.S. academic institutions, where two universities are said to be connected if they both commit to the same repositories. From the visualization, we can identify 5 clusters of academic institutions. At the center, the biggest cluster reveals the broader collaboration landscape for most U.S. universities, nodes that are at the center-most of this cluster (e.g. MIT, UW, NYU)  are most widely connected with others and therefore more active and collaborative in the open-source community. On the other hand, institutions at the periphery of this cluster (e.g. UIUC, WM, Haverford) only collaborated with limited, specific institutions, suggesting that they were less collaborative in the open-source community.
 
 ```{r, echo=FALSE, fig.cap="**View of the Static Node-Link Diagram.** Connections across committers within an intitution (in this case, the University of Utah).", out.width = '50%', fig.align="center"}
 knitr::include_graphics("imgs/nodes.png")
@@ -89,3 +102,7 @@ knitr::include_graphics("imgs/table2.png")
 ```
 
 # References
+
+Hu, Y., Zhang, J., Bai, X. et al. Influence analysis of Github repositories. SpringerPlus 5, 1268 (2016). https://doi.org/10.1186/s40064-016-2897-7
+
+Florian Zandt. How Big Tech Contributes to Open Source. Statistica (2021). URL: https://www.statista.com/chart/25795/active-github-contributors-by-employer/

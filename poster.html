@@ -35,7 +35,7 @@ padding: 0;
 }
 body {
 margin: 0;
-font-size: 45px;
+font-size: 41px;
 width: 48in;
 height: 36in;
 padding: 0;
@@ -145,7 +145,7 @@ background-color: #ffffff;
 }
 .poster_title h3 {
 color: #ffffff;
-font-size: 1em;
+font-size: 60px;
 margin: 0;
 border: 0;
 font-weight: normal;
@@ -171,7 +171,7 @@ margin-bottom: 0;
 .poster_body h1 {
 text-align: center;
 color: #FFFFFF;
-font-size: 65px;
+font-size: 60px;
 border: 2mm solid #a21933;
 background-color: #a21933;
 border-radius: 4mm 0mm;
@@ -280,6 +280,7 @@ font-size: 20pt;
 <div class="title_container">
 <!-- Left Logo  -->
 <div class="logo_left">
+<img src= 'imgs/logo.png' style="width: 80%">
 </div>
 <!-- Poster Title -->
 <div class= "poster_title">
@@ -290,6 +291,7 @@ The Open Source Community Through GitHub Commits </strong></h1>
 </div>
 <!-- Right Logo  -->
 <div class="logo_right">
+<img src=imgs/logo.png style="width: 80%">
 </div>
 </div>
 
@@ -301,20 +303,39 @@ The Open Source Community Through GitHub Commits </strong></h1>
 </div>
 <div id="methods" class="section level1">
 <h1>Methods</h1>
+<center>
+Goal
+</center>
+<p>Our group strived to observe the impact of academic institutions have on the open-source community through analyzing the number of commits at a user and institution wide level.</p>
+<center>
+Data Processing
+</center>
+<p>Any rows that contained null or NA values were dropped with dyplr’s drop_na function. Next the institution names were extracted from email domain from the respective columns column.</p>
+<center>
+Visualizations
+</center>
+<p>Our first visualization created is reactive bar chart displaying the number of commits with options to select grouping the data by users or institutions. Next a static node-link diagram shows the collaborations across U.S. academic institutions. Finally we created a reactive node-link diagram revealing the connections across all committers within the user-selected academic institution.</p>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-1"></span>
-<img src="imgs/bar-graph.png" alt="**View of the Reactive Bar Chart.** This is one of the many views from the reactive bar chart currently showing the top 10 users based on their commit numbers. The options to change the number of bars and aggregation to the institutional level are displayed at the top." width="75%" />
+<img src="imgs/bar-graph.png" alt="**View of the Reactive Bar Chart.** This is one of the many views from the reactive bar chart currently showing the top 10 users based on their commit numbers. The options to change the number of bars and aggregation to the institutional level are displayed at the top." width="95%" />
 <p class="caption">
 Figure 1: <strong>View of the Reactive Bar Chart.</strong> This is one of the many views from the reactive bar chart currently showing the top 10 users based on their commit numbers. The options to change the number of bars and aggregation to the institutional level are displayed at the top.
 </p>
 </div>
 <p>To allow any user to rapidly explore the data a reactive bar chart with various different viewing options was created. The bar chart defaults to the top ten users based on their number of commits. Plotly tooltips allow the user to mouse over each bar to see the precise number of commits as well as their academic institution. There is a numeric input box that allows users to change the number of bars to explore more or fewer users/institutions. The y-axis scaling will update dynamically based on the smallest value and the axis title text will update to match. By selecting the “Institutions” radio button the view will switch to the institutions with the most total commits. These views can be further augmented by clicking on an individual bar which will bring up that institution’s top users.</p>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-2"></span>
+<img src="imgs/web.png" alt="**View of the Static Node-Link Diagram.** This diagram visualizes the connections across institutions based off their member's shared repositories." width="50%" />
+<p class="caption">
+Figure 2: <strong>View of the Static Node-Link Diagram.</strong> This diagram visualizes the connections across institutions based off their member’s shared repositories.
+</p>
+</div>
+<p>This static node-link diagram shows the connections across U.S. academic institutions, where two universities are said to be connected if they both commit to the same repositories. From the visualization, we can identify 5 clusters of academic institutions. At the center, the biggest cluster reveals the broader collaboration landscape for most U.S. universities, nodes that are at the center-most of this cluster (e.g. MIT, UW, NYU) are most widely connected with others and therefore more active and collaborative in the open-source community. On the other hand, institutions at the periphery of this cluster (e.g. UIUC, WM, Haverford) only collaborated with limited, specific institutions, suggesting that they were less collaborative in the open-source community.</p>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
 <img src="imgs/nodes.png" alt="**View of the Static Node-Link Diagram.** Connections across committers within an intitution (in this case, the University of Utah)." width="50%" />
 <p class="caption">
-Figure 2: <strong>View of the Static Node-Link Diagram.</strong> Connections across committers within an intitution (in this case, the University of Utah).
+Figure 3: <strong>View of the Static Node-Link Diagram.</strong> Connections across committers within an intitution (in this case, the University of Utah).
 </p>
 </div>
 <p>This reactive node-link diagram reveals the connections across all committers within the user-selected academic institution. Like the previous graph, two commiters are said to be connected if they both commit to the same repositories. This graph gives us 2 valuable insights: 1) each cluster in the graph can be interpreted as a large-scale collaborative open-source project led by the selected academic institution, where nodes in the cluster (students, staff members, and professors) worked closely to collaborate and contribute. From this graph, we can conclude that, across the history, the University of Utah led 4 such large-scale open-source projects. 2) This graph provides a finer look into the social and performance aspects of individual contributors. For example, we can discover interdisciplinary contributors by finding nodes that connect to multiple clusters. We can also identify the technological “social network” of an academic institution.</p>
@@ -326,21 +347,23 @@ Figure 2: <strong>View of the Static Node-Link Diagram.</strong> Connections acr
 <div id="improvements" class="section level1">
 <h1>Improvements</h1>
 <p>Upon reviewing the results from the views of the bar chart an issue was observed where users with the same name would be stacked and display in an awkward manner. In trying to find a solution to the issue it was observed that these were likely the same user under different accounts/emails e.g. <span class="citation">@wisc.edu</span> vs <span class="citation">@stat.wisc.edu</span>. In order to resolve this issue the hashed email was extracted from the domain and aggregated by this value. To account for individuals who may have changed institutions (Figure 4) within their careers the group by was performed on the hash and institution. The main issue from this process arose with the differing names for these duplicate hashes (Figure 5). A temporary fix for this issue was seleted as summarizing by the maximum name value. This could be a future modification that may bring interesting results if any occur.</p>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
 <img src="imgs/table1.png" alt="**Example of a Change of Institution.** The above figure shows one user determined by the hashed email address that is present under two different institutions.)." width="95%" />
 <p class="caption">
-Figure 3: <strong>Example of a Change of Institution.</strong> The above figure shows one user determined by the hashed email address that is present under two different institutions.).
+Figure 4: <strong>Example of a Change of Institution.</strong> The above figure shows one user determined by the hashed email address that is present under two different institutions.).
 </p>
 </div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-4"></span>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-5"></span>
 <img src="imgs/table2.png" alt="**Example of One User Multiple Names.** The figure above shows a single user that has four rows associated with their unique hash due to the various names. ." width="95%" />
 <p class="caption">
-Figure 4: <strong>Example of One User Multiple Names.</strong> The figure above shows a single user that has four rows associated with their unique hash due to the various names. .
+Figure 5: <strong>Example of One User Multiple Names.</strong> The figure above shows a single user that has four rows associated with their unique hash due to the various names. .
 </p>
 </div>
 </div>
 <div id="references" class="section level1">
 <h1>References</h1>
+<p>Hu, Y., Zhang, J., Bai, X. et al. Influence analysis of Github repositories. SpringerPlus 5, 1268 (2016). <a href="https://doi.org/10.1186/s40064-016-2897-7" class="uri">https://doi.org/10.1186/s40064-016-2897-7</a></p>
+<p>Florian Zandt. How Big Tech Contributes to Open Source. Statistica (2021). URL: <a href="https://www.statista.com/chart/25795/active-github-contributors-by-employer/" class="uri">https://www.statista.com/chart/25795/active-github-contributors-by-employer/</a></p>
 </div>
 </div>
 </div>
