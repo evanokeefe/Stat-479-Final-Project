@@ -20,8 +20,8 @@ logoright_name: "imgs/logo.png"
 #STYLE & FORMATTING
 title_textsize: "80pt"
 author_textsize: "60px"
-affiliation_textsize: "60px"
-affiliation_textcol: '#00000080'
+caption_fontsize: "60pt"
+affiliation_textcol: '#000000'
 
 #---POSTER BODY OPTIONS---#
 primary_colour: '#a21933'
