@@ -53,7 +53,7 @@ institutionNetworkDiagram <- function(target_institution){
   institution_network <- network %>%
     group_by(src_institution, dst_institution) %>%
     summarize(value=n()) %>%
-    filter(src_institution != dst_institution & value > 50)
+    filter(src_institution != dst_institution & value > 20)
   
   E <- data.frame(
     source = institution_network$src_institution,
@@ -63,12 +63,20 @@ institutionNetworkDiagram <- function(target_institution){
   
   G <- as_tbl_graph(E, directed = FALSE)
   
+  G <- G %>%
+    activate(edges) %>%
+    mutate(edge_weight = runif(value))
+  
   ggraph(G, layout = 'fr') + 
-    geom_edge_link(colour = "#d3d3d3", width = 0.5, alpha = 0.5) +
-    geom_node_label(aes(label = name)) +
+    geom_edge_link(aes(col=edge_weight, width=edge_weight), alpha = 0.5) +
+    scale_edge_width_continuous(range = c(0.2, 1)) +
+    geom_node_label(aes(label = name, color=ifelse(name == target_institution, "#ff0000", "#000000"))) +
     coord_fixed() +
     labs(title = "Connection Betwwen Academic Institutions") + 
     theme_void() +
+    scale_edge_colour_viridis() + 
+    scale_color_identity() +
+    guides(edge_width = FALSE) + 
     theme(plot.title = element_text(size = 20, hjust = 0.5))
 }
 
